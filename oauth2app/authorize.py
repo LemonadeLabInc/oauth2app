@@ -198,7 +198,9 @@ class Authorizer(object):
         if self.authorized_response_type & RESPONSE_TYPES[self.response_type] == 0:
             raise UnauthorizedClient("Response type %s not allowed." %
                 self.response_type)
-        if not absolute_http_url_re.match(self.redirect_uri):
+        try:
+            REDIRECT_CLASS(self.redirect_uri)
+        except SuspiciousOperation:
             raise InvalidRequest('Absolute URI required for redirect_uri')
         # Scope
         if self.authorized_scope is not None and self.scope is None:
@@ -316,7 +318,7 @@ class Authorizer(object):
                 parameters['state'] = self.state
             redirect_uri = add_parameters(self.redirect_uri, parameters)
             redirect_uri = add_fragments(redirect_uri, fragments)
-            return HttpResponseRedirect(redirect_uri)
+            return REDIRECT_CLASS(redirect_uri)
         else:
             raise UnauthenticatedUser("Django user object associated with the "
                 "request is not authenticated.")
