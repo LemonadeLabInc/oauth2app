@@ -4,6 +4,7 @@
 """OAuth 2.0 Authorization"""
 
 
+from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponseRedirect
 try:
     from django.http.request import absolute_http_url_re  # Django 1.5+
