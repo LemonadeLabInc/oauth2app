@@ -4,12 +4,15 @@
 """OAuth 2.0 Authorization"""
 
 
+from urllib import urlencode
+
 from django.http import HttpResponseRedirect
 try:
     from django.http.request import absolute_http_url_re  # Django 1.5+
 except ImportError:
     from django.http import absolute_http_url_re
-from urllib import urlencode
+from django.core.exceptions import SuspiciousOperation
+
 from .consts import ACCESS_TOKEN_EXPIRATION, REFRESHABLE
 from .consts import CODE, TOKEN, CODE_AND_TOKEN
 from .consts import AUTHENTICATION_METHOD, MAC, BEARER, MAC_KEY_LENGTH
