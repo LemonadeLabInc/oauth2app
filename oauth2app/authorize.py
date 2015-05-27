@@ -2,15 +2,11 @@
 
 
 """OAuth 2.0 Authorization"""
-
+import re
 
 from urllib import urlencode
 
 from django.http import HttpResponseRedirect
-try:
-    from django.http.request import absolute_http_url_re  # Django 1.5+
-except ImportError:
-    from django.http import absolute_http_url_re
 from django.core.exceptions import SuspiciousOperation
 
 from .consts import ACCESS_TOKEN_EXPIRATION, REFRESHABLE
@@ -20,6 +16,8 @@ from .consts import REDIRECT_CLASS
 from .exceptions import OAuth2Exception
 from .lib.uri import add_parameters, add_fragments, normalize
 from .models import Client, AccessRange, Code, AccessToken, KeyGenerator
+
+absolute_http_url_re = re.compile(r"^https?://", re.I)
 
 
 class AuthorizationException(OAuth2Exception):
